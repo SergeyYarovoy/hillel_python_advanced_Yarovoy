@@ -14,7 +14,6 @@ class BadClass:
 bad = BadClass()
 
 even_worse = { bad }
-print(bad.val)
 assert(bad in even_worse)
 bad.val += 1
 assert(bad in even_worse)
