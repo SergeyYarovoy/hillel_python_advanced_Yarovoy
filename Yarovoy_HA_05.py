@@ -12,7 +12,6 @@ class BadClass:
 
 
 bad = BadClass()
-
 even_worse = { bad }
 assert(bad in even_worse)
 bad.val += 1
@@ -20,5 +19,5 @@ assert(bad in even_worse)
 print('yeah, we good!')
 
 still_bad = BadClass(val=bad.val)
-assert(still_bad in even_worse)
+assert(still_bad in even_worse)             # Assertion
 
