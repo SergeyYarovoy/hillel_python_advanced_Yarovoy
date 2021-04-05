@@ -21,4 +21,4 @@ still_bad = BadClass(val=bad.val, hash_val='Hmmmmm!')
 #still_bad = BadClass(val=bad.val)
 assert(still_bad in even_worse)             # Assertion
 
-sudo iwlist wlp3s0 scan | grep ESSID
+
