@@ -1,8 +1,8 @@
 class BadClass:
 
-   def __init__(self, val=0):
+   def __init__(self, val=0, hash_val = 0):
        self.val = val
-       self.hash_val = 0
+       self.hash_val = hash_val
 
    def __hash__(self):
        return hash(self.hash_val)
