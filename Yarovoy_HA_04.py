@@ -17,3 +17,4 @@ print(list_filtered_my_filter)
 
 list_filtered_embed_filter = list(filter(lambda x: x > -4 and x < 0, number_list))
 print(list_filtered_embed_filter)           # Output: [-5, -4, -3, -2, -1]
+
