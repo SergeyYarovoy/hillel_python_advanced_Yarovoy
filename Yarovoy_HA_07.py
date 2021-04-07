@@ -12,7 +12,7 @@ class Account:
 
     THE_MAX_REFILL_PER_FUNDS_ITERATION = 10000
 
-    def __init__(self, funds: Union[int, float] = 0, logsize: Union[int] = 7):
+    def __init__(self, funds: Union[int, float] = 0, logsize: Union[int] = 10):
         self.funds = self._round_to_centesimal(funds)
         self.logsize = logsize
         self.logcount = 0
@@ -22,13 +22,16 @@ class Account:
             self.logiter += 1
 
         self.logger_setup(self)
-        self.log_operation(f"The account has initialized with {self.funds} value")
+
 
     @protected
     #@staticmethod
     def log_operation(self, msg):
-        print(self.logcount)
+        if self.logsize == 0:
+            return
         if self.logcount == self.logsize:
+            print(f" The logging of operations has stopped because "
+                  f"the log size has reached its maximum value {self.logsize}")
             return
         self.logcount += self.logiter
 
@@ -41,8 +44,10 @@ class Account:
     #@staticmethod
     def logger_setup(self, logsize):
         if self.logsize <= 0:
+            print(f"Logging of operations is not required, since the log size is set to {self.logsize}")
             return
 
+        self.log_operation(f"The account has initialized with {self.funds} value")
         self.logger = logging.getLogger()
         self.logger.setLevel(logging.INFO)
         logger_handler = logging.FileHandler('Account.log', 'a')
@@ -57,10 +62,10 @@ class Account:
     def grow_funds(self, grow_step: Union[int, float]):
         if self.funds + grow_step <= 0:
             print("The funds cannot be less or equal 0!")
-            return
+            return False
         elif grow_step > Account.THE_MAX_REFILL_PER_FUNDS_ITERATION:
             print(f"The funds change cannot be more than {Account.THE_MAX_REFILL_PER_FUNDS_ITERATION} at a time!")
-            return
+            return False
         self.funds += grow_step
         self.funds = self._round_to_centesimal(self.funds)
         self.log_operation(f"The funds has changed to {self.funds}")
@@ -72,7 +77,7 @@ class Account:
 
 if __name__ == '__main__':
 
-    account = Account(123.125)
+    account = Account(123.125, 9)
 
     print(account.get_funds())
 
@@ -85,9 +90,11 @@ if __name__ == '__main__':
     account.grow_funds(-1324)
     print(account.get_funds())
 
-    account.grow_funds(-443)
+    account.grow_funds(float('inf'))
     print(account.get_funds())
 
     for i in range(10):
         account.grow_funds(i)
         print(account.get_funds())
+
+    print(float('inf'))
