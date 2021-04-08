@@ -20,7 +20,7 @@ class Account:
 
     def get_last_tx_list(self):
         if self.logsize == 0:
-            return
+            return list()
         else:
             return list(open("tx_account.log", "r"))[-self.logsize:]
 
