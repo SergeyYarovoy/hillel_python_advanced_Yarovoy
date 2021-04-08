@@ -1,33 +1,43 @@
-from typing import List
 from uuid import uuid4
+from copy import copy, deepcopy
+from typing import Union
 
 
 ########################################################################
 class Person(object):
-    """
-    An immutable Person class
-    """
-    __slots__: list[str] = ["uuid", "name", "last_name"]
+
+    def __init__(self, name: Union[str] = "", last_name: Union[str] = ""):
+        self.uuid = uuid4().hex
+        self.name = name
+        self.last_name = last_name
 
     # ----------------------------------------------------------------------
-    def __init__(self, name, last_name):
-        """Constructor"""
-        super(Person, self).__setattr__("uuid", uuid4().hex)
-        self.set_name(name)
-        self.set_lastname(last_name)
+    def __hash__(self):
+        return hash(self.uuid)
 
     # ----------------------------------------------------------------------
-    def __setattr__(self, name, value):
-        msg = "'%s' has no attribute %s" % (self.__class__, name)
-        raise AttributeError(msg)
+    def __eq__(self, other):
+        return self.uuid == other.uuid
 
     # ----------------------------------------------------------------------
-    def set_name(self, name):
-        super(Person, self).__setattr__("name", name)
+    def __repr__(self):
+        return f'{type(self).__name__}(UUID = {copy(self.uuid)}, name = {copy(self.name)}, ' \
+               f'last_name = {copy(self.last_name)})'
 
     # ----------------------------------------------------------------------
-    def set_lastname(self, last_name):
-        super(Person, self).__setattr__("last_name", last_name)
+    def _set_uuid(self: object) -> object:
+        self._uuid = uuid4().hex
+        return
+
+    # ----------------------------------------------------------------------
+    def set_name(self, name: object) -> object:
+        self.name = name
+        return
+
+    # ----------------------------------------------------------------------
+    def set_lastname(self, last_name: object) -> object:
+        self.last_name = last_name
+        return
 
     # ----------------------------------------------------------------------
     def get_uuid(self):
@@ -41,20 +51,64 @@ class Person(object):
     def get_last_name(self):
         return getattr(self, "last_name")
 
+    # ----------------------------------------------------------------------
+    def create_new_copy_of_person(self, **kwargs):
+        tmp_copy = deepcopy(self)
+        for key_in_kwargs in kwargs:
+            setattr(tmp_copy, key_in_kwargs, kwargs[key_in_kwargs])
+        setattr(tmp_copy, 'uuid', uuid4().hex)
+
+        return tmp_copy
+
 
 ########################################################################
 
-# Инициируем класс ImmutablePerson, Имя и Фамилию задаем явно, UUID генерируется автоматически
-person = Person("Петро", "Ребро")
-print(person.uuid, person.name, person.last_name)
-# меняем Имя и Фамилию
-person.set_name("Ганна")
-person.set_lastname("Шумейко")
-# получаем UUID, Имя и Фамилию адресуя их напрямую
-print(person.uuid, person.name, person.last_name)
-# получаем UUID, Имя и Фамилию посредством методов
-print(person.get_uuid(), person.get_name(), person.get_last_name())
-# ошибка, при попытке изменить UUID, Имя или фамилию адресуя их непосредственно
-# person.uuid = 123
-person.name = "Оксана"
-# person.last_name = "Покотило"
+
+if __name__ == '__main__':
+
+    # Инициируем класс Person, Имя и Фамилию задаем явно, UUID генерируется автоматически
+    person = Person("Петро", "Ребро")
+
+    # печатаем поля нашего объекта через __repr__
+    print(person)
+
+    # печатаем поля нашего объекта через методы
+    print(person.get_uuid(), person.get_name(), person.get_last_name())
+
+    # теперь печатаем содержимое наших полей прямым доступом
+    print(person.uuid, person.name, person.last_name)
+
+    # меняем Имя и Фамилию и проверяем
+    person.set_name("Ганна")
+    print(person)
+    assert person.name == "Ганна", 'Object has not been changed'
+
+    person.set_lastname("Шумейко")
+    # проверяем фамилию
+    assert person.last_name == "Шумейко", 'Object has not been changed'
+
+    # снова печатем поля нашего объекта через __repr__
+    print(person)
+
+    # меняем поля прямым доступом
+    person.name = "Оксана"
+    person.last_name = "Покотило"
+    person.uuid = 1234567890
+
+    # смотрим, что там у нас внутри
+    print(person)
+
+    # Хакаем поле "name"
+    super(Person, person).__setattr__("name", "Василь")
+    #
+    print(person.name)
+
+    # создаем копию экземпляра и пытаемся задать ему uuid  --
+    # в этом случае uuid должен создаться новый, но если мы не задаем имя и/или фамилию,
+    # то эти поля олжны скопироваться из родительского экземпляра
+
+    new_person = person.create_new_copy_of_person(uuid=123)
+    #
+    print("the old person = ", person)          # uuid должен быть измененный выше на 1234567890
+    print("the new persond = ", new_person)     # а тут uuid должен быть уже сгенеренный
+
