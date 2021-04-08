@@ -3,7 +3,7 @@ from uuid import uuid4
 
 
 ########################################################################
-class ImmutablePerson(object):
+class Person(object):
     """
     An immutable Person class
     """
@@ -12,7 +12,7 @@ class ImmutablePerson(object):
     # ----------------------------------------------------------------------
     def __init__(self, name, last_name):
         """Constructor"""
-        super(ImmutablePerson, self).__setattr__("uuid", uuid4().hex)
+        super(Person, self).__setattr__("uuid", uuid4().hex)
         self.set_name(name)
         self.set_lastname(last_name)
 
@@ -23,11 +23,11 @@ class ImmutablePerson(object):
 
     # ----------------------------------------------------------------------
     def set_name(self, name):
-        super(ImmutablePerson, self).__setattr__("name", name)
+        super(Person, self).__setattr__("name", name)
 
     # ----------------------------------------------------------------------
     def set_lastname(self, last_name):
-        super(ImmutablePerson, self).__setattr__("last_name", last_name)
+        super(Person, self).__setattr__("last_name", last_name)
 
     # ----------------------------------------------------------------------
     def get_uuid(self):
@@ -45,7 +45,7 @@ class ImmutablePerson(object):
 ########################################################################
 
 # Инициируем класс ImmutablePerson, Имя и Фамилию задаем явно, UUID генерируется автоматически
-person = ImmutablePerson("Петро", "Ребро")
+person = Person("Петро", "Ребро")
 print(person.uuid, person.name, person.last_name)
 # меняем Имя и Фамилию
 person.set_name("Ганна")
