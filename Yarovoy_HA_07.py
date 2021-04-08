@@ -19,7 +19,10 @@ class Account:
         self.s_logger.warning(f"The account has initialized with {self.funds} value")
 
     def get_last_tx_list(self):
-        return list(open("tx_account.log", "r"))[-self.logsize:]
+        if self.logsize == 0:
+            return
+        else:
+            return list(open("tx_account.log", "r"))[-self.logsize:]
 
     def get_syslog_list(self):
         return list(open("sys_account.log", "r"))[-self.syslog_size:]
@@ -70,7 +73,7 @@ class Account:
 
 if __name__ == '__main__':
 
-    account = Account(-123.125, 7)
+    account = Account(-123.125, 0)
 
     print(account.get_funds())
 
