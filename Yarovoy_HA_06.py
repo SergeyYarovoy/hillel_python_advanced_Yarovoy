@@ -18,7 +18,6 @@ class ImmutablePerson(object):
 
     # ----------------------------------------------------------------------
     def __setattr__(self, name, value):
-        """"""
         msg = "'%s' has no attribute %s" % (self.__class__, name)
         raise AttributeError(msg)
 
