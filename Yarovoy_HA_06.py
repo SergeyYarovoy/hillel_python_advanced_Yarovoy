@@ -110,5 +110,4 @@ if __name__ == '__main__':
     new_person = person.create_new_copy_of_person(uuid=123)
     #
     print("the old person = ", person)          # uuid должен быть измененный выше на 1234567890
-    print("the new persond = ", new_person)     # а тут uuid должен быть уже сгенеренный
-
+    print("the new person = ", new_person)     # а тут uuid должен быть уже сгенеренный
